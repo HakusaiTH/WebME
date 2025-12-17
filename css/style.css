@@ -1,0 +1,104 @@
+body { 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
+    background-color: #fdfdfd; 
+}
+
+.orange-accent { 
+    color: #f97316; 
+}
+
+.bg-orange-accent { 
+    background-color: #f97316; 
+}
+
+.card-shadow { 
+    border: 1px solid #f1f1f1; 
+    border-radius: 1.25rem; 
+    transition: all 0.3s ease; 
+}
+
+.card-shadow:hover { 
+    transform: translateY(-4px); 
+    box-shadow: 0 12px 24px rgba(0,0,0,0.03); 
+}
+
+.section-line { 
+    width: 4px; 
+    height: 28px; 
+    background-color: #f97316; 
+    border-radius: 2px; 
+}
+
+.tech-pill { 
+    border: 1px solid #eee; 
+    border-radius: 0.75rem; 
+    padding: 0.5rem 1rem; 
+    display: flex; 
+    align-items: center; 
+    gap: 0.75rem; 
+    font-weight: 500; 
+    font-size: 0.875rem; 
+    background: white; 
+}
+
+/* Custom styles */
+.certificate-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.certificate-card img {
+    transition: transform 0.5s ease;
+}
+
+.certificate-card:hover img {
+    transform: scale(1.05);
+}
+
+.project-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.project-link i {
+    transition: transform 0.3s ease;
+}
+
+.project-link:hover i {
+    transform: translateX(4px);
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .header-image {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .header-title {
+        font-size: 2.5rem;
+    }
+}
