@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GitHub Style Auth</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  >
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="auth-box">
+    <!-- Logo -->
+    <div class="logo">
+      <i class="fa-brands fa-github"></i>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="showSignIn()">Sign In</button>
+      <button class="tab" onclick="showSignUp()">Sign Up</button>
+    </div>
+
+    <!-- Sign In -->
+    <form id="signin" class="form active">
+      <label>Email</label>
+      <input type="email" placeholder="email@example.com">
+
+      <label>Password</label>
+      <input type="password" placeholder="••••••••">
+
+      <button type="submit">Sign in</button>
+
+      <div class="divider"><span>or</span></div>
+
+      <button type="button" class="social">
+        <i class="fa-brands fa-github"></i>
+        Continue with GitHub
+      </button>
+    </form>
+
+    <!-- Sign Up -->
+    <form id="signup" class="form">
+      <label>Username</label>
+      <input type="text" placeholder="username">
+
+      <label>Email</label>
+      <input type="email" placeholder="email@example.com">
+
+      <label>Password</label>
+      <input type="password" placeholder="Create password">
+
+      <button type="submit">Create account</button>
+    </form>
+  </div>
+
+  <script>
+    function showSignIn() {
+      signin.classList.add("active");
+      signup.classList.remove("active");
+      tabs[0].classList.add("active");
+      tabs[1].classList.remove("active");
+    }
+
+    function showSignUp() {
+      signup.classList.add("active");
+      signin.classList.remove("active");
+      tabs[1].classList.add("active");
+      tabs[0].classList.remove("active");
+    }
+
+    const signin = document.getElementById("signin");
+    const signup = document.getElementById("signup");
+    const tabs = document.querySelectorAll(".tab");
+  </script>
+
+</body>
+</html>
