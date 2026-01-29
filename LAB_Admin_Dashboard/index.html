@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Dashboard</title>
+
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --border: #e5e7eb;
+    }
+
+    body.dark {
+      --bg: #0f172a;
+      --card: #020617;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --primary: #3b82f6;
+      --border: #1e293b;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: Inter, system-ui, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      transition: 0.3s;
+    }
+
+    /* ================= Sidebar ================= */
+    .sidebar {
+      width: 240px;
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      transition: 0.3s;
+    }
+
+    .sidebar.collapsed {
+      width: 70px;
+    }
+
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .menu button {
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 0.7rem 1rem;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .menu button.active,
+    .menu button:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* ================= Main ================= */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ================= Topbar ================= */
+    .topbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0.7rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .left-top {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .toggle-btn {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .search {
+      padding: 0.4rem 0.7rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .right-top {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .badge {
+      background: red;
+      color: #fff;
+      font-size: 0.6rem;
+      padding: 0.1rem 0.3rem;
+      border-radius: 50%;
+      position: relative;
+      top: -8px;
+      left: -5px;
+    }
+
+    .profile {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+
+    /* ================= Content ================= */
+    .content {
+      padding: 1rem;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    /* KPI Cards */
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .kpi {
+      background: var(--card);
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .kpi h3 {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .kpi p {
+      margin: 0.5rem 0 0;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    /* Chart */
+    .chart-box {
+      background: var(--card);
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 1rem;
+    }
+
+    canvas {
+      width: 100%;
+      height: 200px;
+    }
+
+    /* Table + Activity */
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .card {
+      background: var(--card);
+      padding: 1rem;
+      border-radius: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 0.6rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    th {
+      cursor: pointer;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+      margin: 0;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+      color: var(--muted);
+    }
+
+    /* ================= Responsive ================= */
+    @media (max-width: 900px) {
+      .sidebar {
+        position: fixed;
+        left: -240px;
+        top: 0;
+        bottom: 0;
+        z-index: 1000;
+      }
+
+      .sidebar.show {
+        left: 0;
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">MyDash</div>
+
+    <nav class="menu" id="menu">
+      <button class="active">Dashboard</button>
+      <button>Users</button>
+      <button>Orders</button>
+      <button>Products</button>
+      <button>Settings</button>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="left-top">
+        <button class="toggle-btn" id="toggleSidebar">☰</button>
+        <input type="text" class="search" id="search" placeholder="Search...">
+      </div>
+
+      <div class="right-top">
+        <div>🔔<span class="badge">3</span></div>
+        <button class="toggle-btn" id="themeBtn">🌙</button>
+        <div class="profile">
+          <div class="avatar"></div>
+          <span>Phoovadet</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="content">
+
+      <!-- KPI -->
+      <section class="kpis">
+        <div class="kpi"><h3>Revenue</h3><p id="rev">$12,500</p></div>
+        <div class="kpi"><h3>Orders</h3><p id="ord">320</p></div>
+        <div class="kpi"><h3>Users</h3><p id="usr">1,240</p></div>
+        <div class="kpi"><h3>Conversion</h3><p id="conv">4.2%</p></div>
+      </section>
+
+      <!-- Chart -->
+      <section class="chart-box">
+        <h3>Sales Chart</h3>
+        <canvas id="chart"></canvas>
+      </section>
+
+      <!-- Table + Activity -->
+      <section class="grid">
+
+        <!-- Table -->
+        <div class="card">
+          <h3>Recent Orders</h3>
+          <table id="table">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>User</th>
+                <th id="amountHead">Amount ⬍</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>#1001</td><td>Anna</td><td>120</td><td>2026-01-21</td></tr>
+              <tr><td>#1002</td><td>John</td><td>340</td><td>2026-01-22</td></tr>
+              <tr><td>#1003</td><td>Mike</td><td>90</td><td>2026-01-23</td></tr>
+              <tr><td>#1004</td><td>Sara</td><td>210</td><td>2026-01-24</td></tr>
+              <tr><td>#1005</td><td>Tom</td><td>150</td><td>2026-01-25</td></tr>
+              <tr><td>#1006</td><td>Jane</td><td>500</td><td>2026-01-26</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Activity -->
+        <div class="card">
+          <h3>Activity</h3>
+          <ul>
+            <li>User Anna signed up</li>
+            <li>Order #1002 completed</li>
+            <li>Product updated</li>
+            <li>Password changed</li>
+            <li>New message received</li>
+          </ul>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <script>
+    /* ================= Sidebar ================= */
+    const sidebar = document.getElementById("sidebar");
+    const toggleBtn = document.getElementById("toggleSidebar");
+
+    toggleBtn.addEventListener("click", () => {
+      if (window.innerWidth <= 900) {
+        sidebar.classList.toggle("show");
+      } else {
+        sidebar.classList.toggle("collapsed");
+      }
+    });
+
+    /* Active menu */
+    document.querySelectorAll(".menu button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".menu button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+      });
+    });
+
+    /* ================= Theme ================= */
+    const themeBtn = document.getElementById("themeBtn");
+
+    function loadTheme() {
+      const theme = localStorage.getItem("theme");
+      if (theme === "dark") document.body.classList.add("dark");
+    }
+
+    loadTheme();
+
+    themeBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+    });
+
+    /* ================= Search Filter ================= */
+    const search = document.getElementById("search");
+    const rows = document.querySelectorAll("#table tbody tr");
+
+    search.addEventListener("input", () => {
+      const val = search.value.toLowerCase();
+
+      rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(val) ? "" : "none";
+      });
+    });
+
+    /* ================= Sorting ================= */
+    let asc = true;
+    const amountHead = document.getElementById("amountHead");
+    const tbody = document.querySelector("#table tbody");
+
+    amountHead.addEventListener("click", () => {
+      const data = Array.from(tbody.querySelectorAll("tr"));
+
+      data.sort((a, b) => {
+        const A = Number(a.children[2].innerText);
+        const B = Number(b.children[2].innerText);
+        return asc ? A - B : B - A;
+      });
+
+      asc = !asc;
+
+      tbody.innerHTML = "";
+      data.forEach(tr => tbody.appendChild(tr));
+    });
+
+    /* ================= KPI Update ================= */
+    function random(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function updateKPI() {
+      document.getElementById("rev").innerText = "$" + random(8000, 20000);
+      document.getElementById("ord").innerText = random(200, 500);
+      document.getElementById("usr").innerText = random(1000, 3000);
+      document.getElementById("conv").innerText = (Math.random() * 8).toFixed(1) + "%";
+    }
+
+    setInterval(updateKPI, 5000);
+
+    /* ================= Chart ================= */
+    const canvas = document.getElementById("chart");
+    const ctx = canvas.getContext("2d");
+
+    function drawChart() {
+      const w = canvas.width = canvas.offsetWidth;
+      const h = canvas.height = 200;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const data = Array.from({ length: 8 }, () => random(20, 100));
+      const barW = w / data.length - 10;
+
+      data.forEach((v, i) => {
+        const x = i * (barW + 10) + 5;
+        const y = h - v * 1.5;
+
+        ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--primary");
+        ctx.fillRect(x, y, barW, v * 1.5);
+      });
+    }
+
+    drawChart();
+    window.addEventListener("resize", drawChart);
+    setInterval(drawChart, 5000);
+  </script>
+
+</body>
+</html>
